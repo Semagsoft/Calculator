@@ -1,5 +1,5 @@
 ﻿build/
 build-release/
-package/
+package/calculator-1.0-linux-x86_64/
 *.o
 Calculator
