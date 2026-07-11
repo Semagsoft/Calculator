@@ -24,6 +24,17 @@ add_executable(Calculator
 target_include_directories(Calculator PRIVATE include)
 target_link_libraries(Calculator PRIVATE Qt6::Widgets)
 
+install(TARGETS Calculator RUNTIME DESTINATION bin)
+
+install(FILES package/calculator-1.0-linux-x86_64/share/applications/calculator.desktop
+    DESTINATION share/applications)
+
+install(FILES package/calculator-1.0-linux-x86_64/share/icons/hicolor/256x256/apps/calculator.png
+    DESTINATION share/icons/hicolor/256x256/apps)
+
+install(FILES package/calculator-1.0-linux-x86_64/share/icons/hicolor/scalable/apps/calculator.svg
+    DESTINATION share/icons/hicolor/scalable/apps)
+
 option(BUILD_TESTS "Build unit tests" ON)
 
 if(BUILD_TESTS)
