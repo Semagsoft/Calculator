@@ -5,7 +5,7 @@ int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
 
     CalculatorWidget w;
-    w.setWindowTitle("Qt6 Calculator");
+    w.setWindowTitle("Calculator");
     w.resize(560, 520);
     w.show();
 
