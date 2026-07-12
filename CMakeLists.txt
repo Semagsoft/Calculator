@@ -11,7 +11,7 @@ set(CMAKE_AUTOUIC ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
 
-add_executable(Calculator
+add_executable(Calculator WIN32
     src/main.cpp
     src/CalculatorEngine.cpp
     src/CalculatorWidget.cpp
