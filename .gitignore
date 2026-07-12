@@ -3,3 +3,6 @@ build-release/
 package/calculator-1.0-linux-x86_64/
 *.o
 Calculator
+
+Calculator*installer.exe
+Calculator*win64.zip
