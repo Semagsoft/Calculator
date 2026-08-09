@@ -6,6 +6,8 @@ package/calculator-1.01-linux-x86_64/
 package/.appimage-tools/
 *.o
 Calculator
+resources/icons/calculator.ico
+resources/icons/calculator.png
 
 Calculator*installer.exe
 Calculator*win64.zip

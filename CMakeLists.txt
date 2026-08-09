@@ -21,9 +21,56 @@ add_executable(Calculator WIN32
     include/ExpressionParser.h
 )
 
-if(WIN32)
-    target_sources(Calculator PRIVATE resources/calculator.rc)
+set(CALC_ICON_SVG "${CMAKE_CURRENT_SOURCE_DIR}/resources/icons/calculator.svg")
+set(CALC_ICON_PNG "${CMAKE_CURRENT_SOURCE_DIR}/resources/icons/calculator.png")
+set(CALC_ICON_ICO "${CMAKE_CURRENT_SOURCE_DIR}/resources/icons/calculator.ico")
+
+find_program(RSVG_CONVERT_EXECUTABLE rsvg-convert
+    HINTS "C:/msys64/ucrt64/bin" "C:/msys64/mingw64/bin" "C:/msys64/mingw32/bin")
+
+if(RSVG_CONVERT_EXECUTABLE)
+    add_custom_command(
+        OUTPUT "${CALC_ICON_PNG}"
+        COMMAND "${RSVG_CONVERT_EXECUTABLE}" -w 256 -h 256
+                -o "${CALC_ICON_PNG}" "${CALC_ICON_SVG}"
+        DEPENDS "${CALC_ICON_SVG}"
+        COMMENT "Generating calculator.png from calculator.svg"
+        VERBATIM
+    )
+elseif(NOT EXISTS "${CALC_ICON_PNG}")
+    message(FATAL_ERROR
+        "rsvg-convert not found and ${CALC_ICON_PNG} is missing. "
+        "Install rsvg-convert (librsvg2-bin / librsvg / mingw-w64-ucrt-x86_64-librsvg) "
+        "or restore the icon file.")
 endif()
+
+if(WIN32)
+    if(RSVG_CONVERT_EXECUTABLE)
+        add_custom_command(
+            OUTPUT "${CALC_ICON_ICO}"
+            COMMAND powershell -NoProfile -ExecutionPolicy Bypass
+                    -File "${CMAKE_CURRENT_SOURCE_DIR}/scripts/generate-ico.ps1"
+                    -Svg "${CALC_ICON_SVG}" -Out "${CALC_ICON_ICO}"
+            DEPENDS "${CALC_ICON_SVG}"
+            COMMENT "Generating calculator.ico from calculator.svg"
+            VERBATIM
+        )
+    elseif(NOT EXISTS "${CALC_ICON_ICO}")
+        message(FATAL_ERROR
+            "rsvg-convert not found and ${CALC_ICON_ICO} is missing. "
+            "Install rsvg-convert (mingw-w64-ucrt-x86_64-librsvg) or restore the icon file.")
+    endif()
+
+    target_sources(Calculator PRIVATE resources/calculator.rc)
+    set_property(SOURCE resources/calculator.rc APPEND PROPERTY
+        OBJECT_DEPENDS "${CALC_ICON_ICO}")
+endif()
+
+set(CALC_ICON_OUTPUTS "${CALC_ICON_PNG}")
+if(WIN32)
+    list(APPEND CALC_ICON_OUTPUTS "${CALC_ICON_ICO}")
+endif()
+add_custom_target(CalculatorIcons ALL DEPENDS ${CALC_ICON_OUTPUTS})
 
 target_include_directories(Calculator PRIVATE include)
 target_link_libraries(Calculator PRIVATE Qt6::Widgets)
