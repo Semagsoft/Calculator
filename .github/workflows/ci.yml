@@ -58,9 +58,23 @@ jobs:
         run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 
       - name: Build
+        if: runner.os == 'Windows'
+        shell: msys2 {0}
+        run: cmake --build build --config Release -j 2
+
+      - name: Build (Unix)
+        if: runner.os != 'Windows'
         run: cmake --build build --config Release -j 2
 
       - name: Test
+        if: runner.os != 'Windows'
+        run: ctest --test-dir build --output-on-failure
+        env:
+          QT_QPA_PLATFORM: offscreen
+
+      - name: Test (Windows)
+        if: runner.os == 'Windows'
+        shell: msys2 {0}
         run: ctest --test-dir build --output-on-failure
         env:
           QT_QPA_PLATFORM: offscreen
