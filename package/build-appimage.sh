@@ -45,11 +45,11 @@ mkdir -p "$APPDIR/usr/bin" "$APPDIR/usr/share/applications" \
     "$APPDIR/usr/share/icons/hicolor/scalable/apps"
 
 cp "$PROJECT_DIR/build-release/Calculator" "$APPDIR/usr/bin/"
-cp "$SCRIPT_DIR/calculator-1.0-linux-x86_64/share/applications/calculator.desktop" \
+cp "$SCRIPT_DIR/calculator-1.01-linux-x86_64/share/applications/calculator.desktop" \
     "$APPDIR/usr/share/applications/"
-cp "$SCRIPT_DIR/calculator-1.0-linux-x86_64/share/icons/hicolor/256x256/apps/calculator.png" \
+cp "$SCRIPT_DIR/calculator-1.01-linux-x86_64/share/icons/hicolor/256x256/apps/calculator.png" \
     "$APPDIR/usr/share/icons/hicolor/256x256/apps/"
-cp "$SCRIPT_DIR/calculator-1.0-linux-x86_64/share/icons/hicolor/scalable/apps/calculator.svg" \
+cp "$SCRIPT_DIR/calculator-1.01-linux-x86_64/share/icons/hicolor/scalable/apps/calculator.svg" \
     "$APPDIR/usr/share/icons/hicolor/scalable/apps/"
 
 echo "==> Deploying dependencies with linuxdeploy..."
@@ -85,7 +85,7 @@ cp /usr/lib/qt6/plugins/wayland-decoration-client/* "$APPDIR/usr/plugins/wayland
 "$TOOLS_DIR/linuxdeploy/AppRun" --appdir "$APPDIR"
 
 echo "==> Creating AppImage..."
-export VERSION=1.0
+export VERSION=1.01
 "$TOOLS_DIR/appimagetool/AppRun" "$APPDIR" "$SCRIPT_DIR/Calculator-x86_64.AppImage"
 
 echo "==> Done! AppImage created: $SCRIPT_DIR/Calculator-x86_64.AppImage"

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Qt6 Calculator
+Comment=A scientific calculator with expression parsing, history, and themes
+Exec=Calculator
+Icon=calculator
+Categories=Utility;Calculator;
+Terminal=false
+StartupNotify=true

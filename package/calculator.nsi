@@ -2,12 +2,12 @@
 !include "FileFunc.nsh"
 
 Name "Calculator"
-OutFile "Calculator-1.0-win64-installer.exe"
+OutFile "Calculator-1.01-win64-installer.exe"
 InstallDir "$PROGRAMFILES64\Calculator"
 RequestExecutionLevel admin
 
 !define PRODUCT_NAME "Calculator"
-!define PRODUCT_VERSION "1.0"
+!define PRODUCT_VERSION "1.01"
 !define PRODUCT_PUBLISHER "Primo"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 
