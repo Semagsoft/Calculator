@@ -6,7 +6,8 @@ set -e
 #   BUILD_DIR  build directory (default: $PROJECT_DIR/build-macos)
 #   ARCH       target architecture, x86_64 or arm64 (default: host arch)
 # Requires: CMake, a Qt6 install with macdeployqt (qmake6/qmake on PATH),
-# and the macOS developer tools (sips, iconutil, hdiutil).
+# rsvg-convert (brew install librsvg), and the macOS developer tools
+# (sips, iconutil, hdiutil).
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
@@ -16,8 +17,9 @@ ARCH="${2:-$(uname -m)}"
 APPDIR="$BUILD_DIR/Calculator.app"
 DMG="$SCRIPT_DIR/Calculator-$VERSION-macos-$ARCH.dmg"
 ICONSET="$BUILD_DIR/Calculator.iconset"
-ICNS="$BUILD_DIR/Calculator.icns"
-PNG="$PROJECT_DIR/resources/icons/calculator.png"
+ICNS="$BUILD_DIR/calculator.icns"
+SVG="$PROJECT_DIR/resources/icons/calculator.svg"
+RSVG="${RSVG_CONVERT_EXECUTABLE:-rsvg-convert}"
 
 echo "==> Configuring Release build ($ARCH)..."
 cmake -S "$PROJECT_DIR" -B "$BUILD_DIR" -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=OFF -DCMAKE_OSX_ARCHITECTURES="$ARCH"
@@ -26,15 +28,16 @@ echo "==> Building Calculator.app..."
 cmake --build "$BUILD_DIR" -j"$(sysctl -n hw.ncpu)"
 
 echo "==> Generating icon (.icns)..."
-if [ ! -f "$ICNS" ]; then
-    mkdir -p "$ICONSET"
-    for s in 16 32 128 256 512; do
-        sips -z "$s" "$s" "$PNG" --out "$ICONSET/icon_${s}x${s}.png" >/dev/null
-        d=$((s * 2))
-        sips -z "$d" "$d" "$PNG" --out "$ICONSET/icon_${s}x${s}@2x.png" >/dev/null
-    done
-    iconutil -c icns "$ICONSET" -o "$ICNS"
-fi
+rm -rf "$ICONSET"
+mkdir -p "$ICONSET"
+"$RSVG" -w 1024 -h 1024 -o "$ICONSET/source.png" "$SVG"
+for s in 16 32 128 256 512; do
+    sips -z "$s" "$s" "$ICONSET/source.png" --out "$ICONSET/icon_${s}x${s}.png" >/dev/null
+    d=$((s * 2))
+    sips -z "$d" "$d" "$ICONSET/source.png" --out "$ICONSET/icon_${s}x${s}@2x.png" >/dev/null
+done
+rm -f "$ICONSET/source.png"
+iconutil -c icns "$ICONSET" -o "$ICNS"
 cp "$ICNS" "$APPDIR/Contents/Resources/"
 
 echo "==> Deploying Qt dependencies (macdeployqt)..."
