@@ -45,11 +45,11 @@ mkdir -p "$APPDIR/usr/bin" "$APPDIR/usr/share/applications" \
     "$APPDIR/usr/share/icons/hicolor/scalable/apps"
 
 cp "$PROJECT_DIR/build-release/Calculator" "$APPDIR/usr/bin/"
-cp "$SCRIPT_DIR/calculator-1.01-linux-x86_64/share/applications/calculator.desktop" \
+cp "$PROJECT_DIR/resources/applications/calculator.desktop" \
     "$APPDIR/usr/share/applications/"
-cp "$SCRIPT_DIR/calculator-1.01-linux-x86_64/share/icons/hicolor/256x256/apps/calculator.png" \
+cp "$PROJECT_DIR/resources/icons/calculator.png" \
     "$APPDIR/usr/share/icons/hicolor/256x256/apps/"
-cp "$SCRIPT_DIR/calculator-1.01-linux-x86_64/share/icons/hicolor/scalable/apps/calculator.svg" \
+cp "$PROJECT_DIR/resources/icons/calculator.svg" \
     "$APPDIR/usr/share/icons/hicolor/scalable/apps/"
 
 echo "==> Deploying dependencies with linuxdeploy..."

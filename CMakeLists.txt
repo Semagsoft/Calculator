@@ -36,16 +36,16 @@ if(APPLE)
     )
 endif()
 
-install(FILES package/calculator-1.01-linux-x86_64/share/applications/calculator.desktop
+install(FILES resources/applications/calculator.desktop
     DESTINATION share/applications)
 
-install(FILES package/calculator-1.01-linux-x86_64/share/icons/hicolor/256x256/apps/calculator.png
+install(FILES resources/icons/calculator.png
     DESTINATION share/icons/hicolor/256x256/apps)
 
-install(FILES package/calculator-1.01-linux-x86_64/share/icons/hicolor/scalable/apps/calculator.svg
+install(FILES resources/icons/calculator.svg
     DESTINATION share/icons/hicolor/scalable/apps)
 
-install(FILES package/calculator-1.01-linux-x86_64/share/metainfo/calculator.metainfo.xml
+install(FILES resources/metainfo/calculator.metainfo.xml
     DESTINATION share/metainfo)
 
 if(APPLE)

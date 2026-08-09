@@ -17,7 +17,7 @@ APPDIR="$BUILD_DIR/Calculator.app"
 DMG="$SCRIPT_DIR/Calculator-$VERSION-macos-$ARCH.dmg"
 ICONSET="$BUILD_DIR/Calculator.iconset"
 ICNS="$BUILD_DIR/Calculator.icns"
-PNG="$PROJECT_DIR/package/calculator-1.01-linux-x86_64/share/icons/hicolor/256x256/apps/calculator.png"
+PNG="$PROJECT_DIR/resources/icons/calculator.png"
 
 echo "==> Configuring Release build ($ARCH)..."
 cmake -S "$PROJECT_DIR" -B "$BUILD_DIR" -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=OFF -DCMAKE_OSX_ARCHITECTURES="$ARCH"
