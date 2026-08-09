@@ -38,11 +38,15 @@ for s in 16 32 128 256 512; do
 done
 rm -f "$ICONSET/source.png"
 iconutil -c icns "$ICONSET" -o "$ICNS"
+mkdir -p "$APPDIR/Contents/Resources"
 cp "$ICNS" "$APPDIR/Contents/Resources/"
 
 echo "==> Deploying Qt dependencies (macdeployqt)..."
 QT_BIN_DIR="${QT_BIN_DIR:-$(dirname "$(command -v qmake6 || command -v qmake)")}"
 "$QT_BIN_DIR/macdeployqt" "$APPDIR" -always-overwrite
+
+echo "==> Re-signing with ad-hoc signature..."
+codesign --force --deep --sign - "$APPDIR"
 
 echo "==> Creating DMG..."
 rm -f "$DMG"
