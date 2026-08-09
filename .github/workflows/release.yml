@@ -189,6 +189,9 @@ jobs:
     name: Flatpak bundle
     needs: prepare
     runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/flathub-infra/flatpak-github-actions:kde-6.9
+      options: --privileged
     steps:
       - uses: actions/checkout@v4
 
@@ -198,10 +201,21 @@ jobs:
           manifest-path: io.github.primo.Calculator.yml
           build-bundle: true
           bundle: Calculator-1.01.flatpak
+          artifact-name: Calculator-1.01.flatpak
           cache: true
+
+  upload-flatpak:
+    name: Upload Flatpak bundle
+    needs: [prepare, flatpak]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: Calculator-1.01.flatpak
+          path: dist
 
       - name: Upload to Release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release upload "$GITHUB_REF_NAME" Calculator-1.01.flatpak --clobber
+          gh release upload "$GITHUB_REF_NAME" dist/Calculator-1.01.flatpak --clobber
