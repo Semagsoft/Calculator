@@ -1,8 +1,13 @@
 ﻿build/
 build-release/
-package/calculator-1.0-linux-x86_64/
+build-macos/
+build-flatpak/
+package/calculator-1.01-linux-x86_64/
+package/.appimage-tools/
 *.o
 Calculator
 
 Calculator*installer.exe
 Calculator*win64.zip
+package/Calculator*.AppImage
+package/Calculator*.dmg

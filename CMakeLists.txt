@@ -24,7 +24,17 @@ add_executable(Calculator WIN32
 target_include_directories(Calculator PRIVATE include)
 target_link_libraries(Calculator PRIVATE Qt6::Widgets)
 
-install(TARGETS Calculator RUNTIME DESTINATION bin)
+if(APPLE)
+    set_target_properties(Calculator PROPERTIES
+        MACOSX_BUNDLE TRUE
+        MACOSX_BUNDLE_BUNDLE_NAME "Calculator"
+        MACOSX_BUNDLE_GUI_IDENTIFIER "io.github.primo.Calculator"
+        MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION}"
+        MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_VERSION}"
+        MACOSX_BUNDLE_ICON_FILE "calculator"
+        MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/package/Info.plist.in"
+    )
+endif()
 
 install(FILES package/calculator-1.01-linux-x86_64/share/applications/calculator.desktop
     DESTINATION share/applications)
@@ -34,6 +44,15 @@ install(FILES package/calculator-1.01-linux-x86_64/share/icons/hicolor/256x256/a
 
 install(FILES package/calculator-1.01-linux-x86_64/share/icons/hicolor/scalable/apps/calculator.svg
     DESTINATION share/icons/hicolor/scalable/apps)
+
+install(FILES package/calculator-1.01-linux-x86_64/share/metainfo/calculator.metainfo.xml
+    DESTINATION share/metainfo)
+
+if(APPLE)
+    install(TARGETS Calculator BUNDLE DESTINATION .)
+else()
+    install(TARGETS Calculator RUNTIME DESTINATION bin)
+endif()
 
 option(BUILD_TESTS "Build unit tests" ON)
 
