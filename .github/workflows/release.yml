@@ -70,6 +70,7 @@ jobs:
 
       - name: Install Qt6
         run: |
+          brew untap aws/tap 2>/dev/null || true
           brew install qt
           echo "$(brew --prefix qt)/bin" >> "$GITHUB_PATH"
 
@@ -99,6 +100,7 @@ jobs:
 
       - name: Install Qt6
         run: |
+          brew untap aws/tap 2>/dev/null || true
           brew install qt
           echo "$(brew --prefix qt)/bin" >> "$GITHUB_PATH"
 
