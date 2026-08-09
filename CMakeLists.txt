@@ -21,6 +21,10 @@ add_executable(Calculator WIN32
     include/ExpressionParser.h
 )
 
+if(WIN32)
+    target_sources(Calculator PRIVATE resources/calculator.rc)
+endif()
+
 target_include_directories(Calculator PRIVATE include)
 target_link_libraries(Calculator PRIVATE Qt6::Widgets)
 
