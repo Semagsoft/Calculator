@@ -11,3 +11,6 @@ Calculator*installer.exe
 Calculator*win64.zip
 package/Calculator*.AppImage
 package/Calculator*.dmg
+package/Calculator*.msi
+build-msi/
+dist/
