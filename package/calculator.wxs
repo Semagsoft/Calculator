@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Package Name="Calculator"
+           Manufacturer="Primo"
+           Version="$(var.Version)"
+           UpgradeCode="4A110F08-37A7-4E74-839B-B1A9C3A33081"
+           Scope="perMachine"
+           Language="1033"
+           InstallerVersion="500">
+    <MajorUpgrade DowngradeErrorMessage="A newer version of Calculator is already installed." />
+    <MediaTemplate EmbedCab="yes" />
+
+    <Feature Id="MainFeature" Title="Calculator" Level="1">
+      <ComponentGroupRef Id="AppComponents" />
+      <ComponentRef Id="ApplicationShortcut" />
+    </Feature>
+  </Package>
+
+  <Fragment>
+    <StandardDirectory Id="ProgramFiles64Folder">
+      <Directory Id="INSTALLFOLDER" Name="Calculator" />
+    </StandardDirectory>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="AppComponents" Directory="INSTALLFOLDER">
+      <Files Include="$(var.SourceDir)\**" />
+    </ComponentGroup>
+  </Fragment>
+
+  <Fragment>
+    <StandardDirectory Id="ProgramMenuFolder">
+      <Directory Id="ApplicationProgramsFolder" Name="Calculator">
+        <Component Id="ApplicationShortcut" Guid="*">
+          <Shortcut Id="ApplicationStartMenuShortcut"
+                    Name="Calculator"
+                    Description="Qt6 Calculator"
+                    Target="[INSTALLFOLDER]Calculator.exe"
+                    WorkingDirectory="INSTALLFOLDER" />
+          <RegistryValue Root="HKLM"
+                         Key="Software\Primo\Calculator"
+                         Name="installed"
+                         Type="integer"
+                         Value="1"
+                         KeyPath="yes" />
+          <RemoveFolder Id="RemoveApplicationProgramsFolder" On="uninstall" />
+        </Component>
+      </Directory>
+    </StandardDirectory>
+  </Fragment>
+</Wix>

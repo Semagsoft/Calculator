@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>calculator</id>
+  <name>Qt6 Calculator</name>
+  <summary>A scientific calculator with expression parsing, history, and themes</summary>
+  <description>
+    <p>A Qt6-based scientific calculator featuring:</p>
+    <ul>
+      <li>Full expression parsing with operator precedence</li>
+      <li>Trigonometric functions (sin, cos, tan) with degree/radian support</li>
+      <li>Logarithms, exponentiation, factorials, and more</li>
+      <li>Expression history with keyboard navigation</li>
+      <li>Memory operations (M+, M-, MR, MC)</li>
+      <li>6 built-in themes (Light, Dark, Blue, Green, Purple, High Contrast)</li>
+      <li>Scientific notation support</li>
+    </ul>
+  </description>
+  <url type="homepage">https://github.com/primo/Calculator</url>
+  <provides>
+    <binary>Calculator</binary>
+  </provides>
+  <categories>
+    <category>Utility</category>
+    <category>Calculator</category>
+  </categories>
+  <releases>
+    <release version="1.01" date="2026-08-08" />
+  </releases>
+</component>
