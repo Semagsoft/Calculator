@@ -1,5 +1,7 @@
 # Qt6 Calculator
 
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/A3D729DKXZ)
+
 A scientific calculator built with Qt6 and C++17.
 
 ## Features
