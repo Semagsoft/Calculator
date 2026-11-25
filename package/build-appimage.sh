@@ -3,6 +3,16 @@ set -e
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+# Derive version from the CMake project (single source of truth).
+VERSION=$(grep -m1 'project(Calculator VERSION' "$PROJECT_DIR/CMakeLists.txt" \
+    | sed -E 's/.*VERSION ([0-9][0-9.]*[0-9]).*/\1/')
+if [ -z "$VERSION" ]; then
+    echo "ERROR: Could not derive version from CMakeLists.txt" >&2
+    exit 1
+fi
+export VERSION
+
 APPDIR=$(mktemp -d /tmp/calculator-appdir-XXXXXXXX)
 TOOLS_DIR="$SCRIPT_DIR/.appimage-tools"
 
@@ -85,7 +95,7 @@ cp /usr/lib/qt6/plugins/wayland-decoration-client/* "$APPDIR/usr/plugins/wayland
 "$TOOLS_DIR/linuxdeploy/AppRun" --appdir "$APPDIR"
 
 echo "==> Creating AppImage..."
-export VERSION=1.01
+# VERSION already derived from CMakeLists.txt above.
 "$TOOLS_DIR/appimagetool/AppRun" "$APPDIR" "$SCRIPT_DIR/Calculator-x86_64.AppImage"
 
 echo "==> Done! AppImage created: $SCRIPT_DIR/Calculator-x86_64.AppImage"

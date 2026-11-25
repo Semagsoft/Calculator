@@ -51,7 +51,7 @@ jobs:
         run: |
           mkdir -p dist
           DESTDIR="$(pwd)/dist-root" cmake --install build-release --prefix /usr
-          tar -czf dist/Calculator-1.01-linux-x86_64.tar.gz -C dist-root usr
+          tar -czf "dist/Calculator-${GITHUB_REF_NAME#v}-linux-x86_64.tar.gz" -C dist-root usr
 
       - name: Upload to Release
         env:
@@ -59,7 +59,7 @@ jobs:
         run: |
           gh release upload "$GITHUB_REF_NAME" \
             package/Calculator-x86_64.AppImage \
-            dist/Calculator-1.01-linux-x86_64.tar.gz \
+            "dist/Calculator-${GITHUB_REF_NAME#v}-linux-x86_64.tar.gz" \
             --clobber
 
   macos-arm64:
@@ -81,7 +81,7 @@ jobs:
       - name: Create tar.gz archive
         run: |
           mkdir -p dist
-          tar -czf dist/Calculator-1.01-macos-arm64.tar.gz -C build-macos Calculator.app
+          tar -czf "dist/Calculator-${GITHUB_REF_NAME#v}-macos-arm64.tar.gz" -C build-macos Calculator.app
 
       - name: Upload to Release
         env:
@@ -89,7 +89,7 @@ jobs:
         run: |
           gh release upload "$GITHUB_REF_NAME" \
             package/Calculator-1.01-macos-arm64.dmg \
-            dist/Calculator-1.01-macos-arm64.tar.gz \
+            "dist/Calculator-${GITHUB_REF_NAME#v}-macos-arm64.tar.gz" \
             --clobber
 
   macos-x86_64:
@@ -111,7 +111,7 @@ jobs:
       - name: Create tar.gz archive
         run: |
           mkdir -p dist
-          tar -czf dist/Calculator-1.01-macos-x86_64.tar.gz -C build-macos Calculator.app
+          tar -czf "dist/Calculator-${GITHUB_REF_NAME#v}-macos-x86_64.tar.gz" -C build-macos Calculator.app
 
       - name: Upload to Release
         env:
@@ -119,7 +119,7 @@ jobs:
         run: |
           gh release upload "$GITHUB_REF_NAME" \
             package/Calculator-1.01-macos-x86_64.dmg \
-            dist/Calculator-1.01-macos-x86_64.tar.gz \
+            "dist/Calculator-${GITHUB_REF_NAME#v}-macos-x86_64.tar.gz" \
             --clobber
 
   windows:

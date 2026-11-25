@@ -1,0 +1,57 @@
+# clang-format style for the Qt6 Calculator project.
+# Matches the existing codebase conventions (4-space indent, LLVM-like brace placement).
+BasedOnStyle: LLVM
+
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+ColumnLimit: 120
+BreakBeforeBraces: Attach
+AllowShortIfStatementsOnASingleLine: false
+AllowShortLoopsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: Empty
+AllowShortCaseLabelsOnASingleLine: false
+AllowShortBlocksOnASingleLine: false
+AllowShortEnumsOnASingleLine: false
+AllowShortLambdasOnASingleLine: Empty
+AllowShortBinaryExpressionsOnASingleLine: false
+AllowShortInlineLambdasOnASingleLine: Empty
+AlwaysBreakTemplateDeclarations: Yes
+BinPackParameters: true
+BinPackArguments: true
+BreakConstructorInitializersBeforeComma: false
+BreakConstructorInitializers: BeforeComma
+BreakAfterReturnType: All
+BreakBeforeBinaryOperators: NonAssignment
+BreakInheritanceList: BeforeComma
+BreakBeforeTernaryOperators: true
+ConstructorInitializerAllOnOneLineOrOnePerLine: true
+ConstructorInitializerIndentWidth: 4
+ContinuationIndentWidth: 4
+Cpp11BracedListStyle: true
+DerivePointerAlignment: false
+EmptyLineBeforeAccessModifier: false
+FixNamespaceComments: false
+IndentCaseLabels: true
+IndentPPDirectives: None
+IndentWrappedFunctionNames: false
+KeepEmptyLinesAtTheStartOfBlocks: true
+MacroBlockBegin: ""
+MacroBlockEnd: ""
+MaxEmptyLinesToKeep: 1
+NamespaceIndentation: None
+PenaltyBreakBeforeFirstCallParameter: 1
+PenaltyBreakComment: 300
+PenaltyBreakFirstLessLess: 120
+PenaltyBreakString: 1000
+PenaltyExcessCharacter: 1000000
+PenaltyIndentedWhitespace: 0
+PointerAlignment: Left
+ReferenceAlignment: Left
+ReindentIncludes: true
+SeparateDefinitionBlocks: false
+ShortNamespaceLinesOnASingleLine: false
+SortIncludes: CaseSensitive
+Standard: Cpp17
+StatementMacros: [Q_UNUSED, QT_REQUIRE_VERSION, QT_TR_NOOP, QT_TRANSLATE_NOOP]
+StrictPointerAlignment: false

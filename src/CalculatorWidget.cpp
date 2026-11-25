@@ -647,6 +647,9 @@ void CalculatorWidget::keyPressEvent(QKeyEvent *event) {
         onButtonClicked("C");
     } else if (event->key() == Qt::Key_Up) {
         keyBuffer.clear();
+        // History is stored newest-first (prepended in addHistoryEntry), so
+        // historyIndex=0 refers to the newest entry. The expression at the
+        // displayed slot is history[size - 1 - historyIndex].
         if (!history.isEmpty() && historyIndex < history.size() - 1) {
             if (historyIndex == -1)
                 pendingExpression = currentExpression;

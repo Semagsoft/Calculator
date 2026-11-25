@@ -11,7 +11,15 @@ set -e
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-VERSION="1.01"
+
+# Derive version from the CMake project (single source of truth).
+VERSION=$(grep -m1 'project(Calculator VERSION' "$PROJECT_DIR/CMakeLists.txt" \
+    | sed -E 's/.*VERSION ([0-9][0-9.]*[0-9]).*/\1/')
+if [ -z "$VERSION" ]; then
+    echo "ERROR: Could not derive version from CMakeLists.txt" >&2
+    exit 1
+fi
+
 BUILD_DIR="${1:-$PROJECT_DIR/build-macos}"
 ARCH="${2:-$(uname -m)}"
 APPDIR="$BUILD_DIR/Calculator.app"

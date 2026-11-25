@@ -134,8 +134,6 @@ double ExpressionParser::evaluateRPN(const std::vector<std::string>& rpn, Calcul
             values.push(std::stod(token));
         } else if (token == "(" || token == ")") {
             continue;
-        } else if (token == "C") {
-            values = std::stack<double>();
         } else if (token == "√" || token == "sqrt" || functions.count(token)) {
             if (values.empty()) return 0;
             double val = values.top();
