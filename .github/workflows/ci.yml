@@ -104,4 +104,7 @@ jobs:
       - name: Install clang-format
         run: sudo apt-get update && sudo apt-get install -y clang-format
       - name: Check formatting
-        run: clang-format --dry-run --Werror src/ include/ tests/
+        run: |
+          find src include tests -type f \
+            \( -name '*.cpp' -o -name '*.h' -o -name '*.hpp' -o -name '*.cc' \) \
+            -print0 | xargs -0 -r clang-format --dry-run --Werror
