@@ -1,7 +1,5 @@
 # clang-format style for the Qt6 Calculator project.
-# Matches the existing codebase conventions (4-space indent, LLVM-like brace placement).
 BasedOnStyle: LLVM
-
 IndentWidth: 4
 TabWidth: 4
 UseTab: Never
@@ -13,9 +11,6 @@ AllowShortFunctionsOnASingleLine: Empty
 AllowShortCaseLabelsOnASingleLine: false
 AllowShortBlocksOnASingleLine: false
 AllowShortEnumsOnASingleLine: false
-AllowShortLambdasOnASingleLine: Empty
-AllowShortBinaryExpressionsOnASingleLine: false
-AllowShortInlineLambdasOnASingleLine: Empty
 AlwaysBreakTemplateDeclarations: Yes
 BinPackParameters: true
 BinPackArguments: true
@@ -30,7 +25,6 @@ ConstructorInitializerIndentWidth: 4
 ContinuationIndentWidth: 4
 Cpp11BracedListStyle: true
 DerivePointerAlignment: false
-EmptyLineBeforeAccessModifier: false
 FixNamespaceComments: false
 IndentCaseLabels: true
 IndentPPDirectives: None
@@ -48,10 +42,6 @@ PenaltyExcessCharacter: 1000000
 PenaltyIndentedWhitespace: 0
 PointerAlignment: Left
 ReferenceAlignment: Left
-ReindentIncludes: true
-SeparateDefinitionBlocks: false
-ShortNamespaceLinesOnASingleLine: false
+SeparateDefinitionBlocks: Never
 SortIncludes: CaseSensitive
-Standard: Cpp17
 StatementMacros: [Q_UNUSED, QT_REQUIRE_VERSION, QT_TR_NOOP, QT_TRANSLATE_NOOP]
-StrictPointerAlignment: false

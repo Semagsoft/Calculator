@@ -1,29 +1,26 @@
 #include "CalculatorWidget.h"
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QGridLayout>
-#include <QPushButton>
 #include <QApplication>
 #include <QClipboard>
 #include <QFont>
+#include <QGridLayout>
+#include <QHBoxLayout>
 #include <QKeyEvent>
-#include <QResizeEvent>
 #include <QLabel>
 #include <QLocale>
 #include <QMap>
+#include <QPushButton>
+#include <QResizeEvent>
+#include <QVBoxLayout>
 #include <cmath>
-
-CalculatorWidget::CalculatorWidget(QWidget *parent)
-    : QWidget(parent), currentExpression("0")
-{
+CalculatorWidget::CalculatorWidget(QWidget* parent) : QWidget(parent), currentExpression("0") {
     setMinimumSize(480, 440);
     setupUI();
     applyStyle(Theme::Light);
     loadHistory();
     updateStatusLabel();
 }
-
-void CalculatorWidget::setupUI() {
+void
+CalculatorWidget::setupUI() {
     QHBoxLayout* outerLayout = new QHBoxLayout(this);
     outerLayout->setSpacing(6);
 
@@ -86,16 +83,18 @@ void CalculatorWidget::setupUI() {
 
     QGridLayout* grid = new QGridLayout();
     grid->setSpacing(4);
-
-    struct ButtonDef { QString text; int row; int col; };
+    struct ButtonDef {
+        QString text;
+        int row;
+        int col;
+    };
     QVector<ButtonDef> buttons = {
-        {"MC",  0,0}, {"MR",  0,1}, {"M+",  0,2}, {"M-",  0,3}, {"C",   0,4}, {"DEL", 0,5},
-        {"%",   1,0}, {"^",   1,1}, {"√",   1,2}, {"DEG", 1,3}, {"1/x", 1,4}, {"x²",  1,5},
-        {"x³",  2,0}, {"n!",  2,1}, {"10ˣ", 2,2}, {"|x|", 2,3}, {"sin", 2,4}, {"cos", 2,5},
-        {"tan", 3,0}, {"ln",  3,1}, {"log", 3,2}, {"7",   3,3}, {"8",   3,4}, {"9",   3,5},
-        {"*",   4,0}, {"/",   4,1}, {"4",   4,2}, {"5",   4,3}, {"6",   4,4}, {"+",   4,5},
-        {"-",   5,0}, {"1",   5,1}, {"2",   5,2}, {"3",   5,3}, {"π",   5,4}, {"e",   5,5},
-        {"0",   6,0}, {".",   6,1}, {"=",   6,2}, {"(",   6,3}, {")",   6,4}, {"perc", 6,5},
+        {"MC", 0, 0},  {"MR", 0, 1},  {"M+", 0, 2},  {"M-", 0, 3},  {"C", 0, 4},   {"DEL", 0, 5}, {"%", 1, 0},
+        {"^", 1, 1},   {"√", 1, 2},   {"DEG", 1, 3}, {"1/x", 1, 4}, {"x²", 1, 5},  {"x³", 2, 0},  {"n!", 2, 1},
+        {"10ˣ", 2, 2}, {"|x|", 2, 3}, {"sin", 2, 4}, {"cos", 2, 5}, {"tan", 3, 0}, {"ln", 3, 1},  {"log", 3, 2},
+        {"7", 3, 3},   {"8", 3, 4},   {"9", 3, 5},   {"*", 4, 0},   {"/", 4, 1},   {"4", 4, 2},   {"5", 4, 3},
+        {"6", 4, 4},   {"+", 4, 5},   {"-", 5, 0},   {"1", 5, 1},   {"2", 5, 2},   {"3", 5, 3},   {"π", 5, 4},
+        {"e", 5, 5},   {"0", 6, 0},   {".", 6, 1},   {"=", 6, 2},   {"(", 6, 3},   {")", 6, 4},   {"perc", 6, 5},
     };
 
     QMap<QString, QString> tips;
@@ -131,14 +130,22 @@ void CalculatorWidget::setupUI() {
         btn->setFont(QFont("Arial", 12));
         grid->addWidget(btn, b.row, b.col);
 
-        if (b.text == "MC")  mcBtn = btn;
-        if (b.text == "MR")  mrBtn = btn;
-        if (b.text == "DEG") angleBtn = btn;
-        if (b.text == "sin") sinBtn = btn;
-        if (b.text == "cos") cosBtn = btn;
-        if (b.text == "tan") tanBtn = btn;
-        if (b.text == "ln")  lnBtn = btn;
-        if (b.text == "=")   btn->setObjectName("equalsBtn");
+        if (b.text == "MC")
+            mcBtn = btn;
+        if (b.text == "MR")
+            mrBtn = btn;
+        if (b.text == "DEG")
+            angleBtn = btn;
+        if (b.text == "sin")
+            sinBtn = btn;
+        if (b.text == "cos")
+            cosBtn = btn;
+        if (b.text == "tan")
+            tanBtn = btn;
+        if (b.text == "ln")
+            lnBtn = btn;
+        if (b.text == "=")
+            btn->setObjectName("equalsBtn");
 
         auto it = tips.find(b.text);
         if (it != tips.end())
@@ -150,8 +157,10 @@ void CalculatorWidget::setupUI() {
         });
     }
 
-    for (int i = 0; i < 6; ++i) grid->setColumnStretch(i, 1);
-    for (int i = 0; i < 7; ++i) grid->setRowStretch(i, 1);
+    for (int i = 0; i < 6; ++i)
+        grid->setColumnStretch(i, 1);
+    for (int i = 0; i < 7; ++i)
+        grid->setRowStretch(i, 1);
 
     calcLayout->addLayout(grid);
 
@@ -187,9 +196,7 @@ void CalculatorWidget::setupUI() {
     toolbar->addWidget(statusLabel);
     calcLayout->addLayout(toolbar);
 
-    QObject::connect(themeBtn, &QPushButton::clicked, [this]() {
-        cycleTheme();
-    });
+    QObject::connect(themeBtn, &QPushButton::clicked, [this]() { cycleTheme(); });
 
     QObject::connect(secondBtn, &QPushButton::clicked, [this]() {
         secondMode = secondBtn->isChecked();
@@ -202,67 +209,70 @@ void CalculatorWidget::setupUI() {
         historyPanel->setVisible(historyVisible);
     });
 
-    QObject::connect(sciBtn, &QPushButton::clicked, [this]() {
-        onButtonClicked(scientificNotation ? "NORM" : "SCI");
-    });
+    QObject::connect(sciBtn, &QPushButton::clicked, [this]() { onButtonClicked(scientificNotation ? "NORM" : "SCI"); });
 
     outerLayout->addWidget(historyPanel, 1);
     outerLayout->addLayout(calcLayout, 3);
 
     updateMemoryButtons();
 }
-
-void CalculatorWidget::updateMemoryButtons() {
-    if (mcBtn) mcBtn->setEnabled(memoryValue != 0);
-    if (mrBtn) mrBtn->setEnabled(memoryValue != 0);
-    if (memIndicator) memIndicator->setText(memoryValue != 0 ? "M" : "");
+void
+CalculatorWidget::updateMemoryButtons() {
+    if (mcBtn)
+        mcBtn->setEnabled(memoryValue != 0);
+    if (mrBtn)
+        mrBtn->setEnabled(memoryValue != 0);
+    if (memIndicator)
+        memIndicator->setText(memoryValue != 0 ? "M" : "");
     updateStatusLabel();
 }
-
-void CalculatorWidget::updateStatusLabel() {
+void
+CalculatorWidget::updateStatusLabel() {
     QStringList parts;
     parts << (engine.angleMode() == AngleMode::DEGREES ? "DEG" : "RAD");
     parts << (scientificNotation ? "SCI" : "NORM");
-    if (secondMode) parts << "2nd";
-    if (memoryValue != 0) parts << "M";
-    if (statusLabel) statusLabel->setText(parts.join("  "));
+    if (secondMode)
+        parts << "2nd";
+    if (memoryValue != 0)
+        parts << "M";
+    if (statusLabel)
+        statusLabel->setText(parts.join("  "));
 }
-
-static QListWidgetItem* makeHistoryItem(QListWidget* list, const QString& expr, const QString& result) {
-    QLabel* label = new QLabel(
-        QString("<div style='font-size:10px; color:gray;'>%1</div>"
-                "<div style='font-size:13px; font-weight:bold;'>%2</div>")
-            .arg(expr.toHtmlEscaped(), result.toHtmlEscaped())
-    );
+static QListWidgetItem*
+makeHistoryItem(QListWidget* list, const QString& expr, const QString& result) {
+    QLabel* label = new QLabel(QString("<div style='font-size:10px; color:gray;'>%1</div>"
+                                       "<div style='font-size:13px; font-weight:bold;'>%2</div>")
+                                   .arg(expr.toHtmlEscaped(), result.toHtmlEscaped()));
     label->setWordWrap(true);
     label->setContentsMargins(4, 2, 4, 2);
     label->setTextFormat(Qt::RichText);
 
-    int h = QFontMetrics(QFont("Arial", 10)).lineSpacing()
-          + QFontMetrics(QFont("Arial", 13, QFont::Bold)).lineSpacing() + 12;
+    int h = QFontMetrics(QFont("Arial", 10)).lineSpacing() + QFontMetrics(QFont("Arial", 13, QFont::Bold)).lineSpacing()
+            + 12;
     QListWidgetItem* item = new QListWidgetItem();
     item->setSizeHint(QSize(0, h));
     list->insertItem(0, item);
     list->setItemWidget(item, label);
     return item;
 }
-
-void CalculatorWidget::addHistoryEntry(const QString& expr, const QString& result) {
+void
+CalculatorWidget::addHistoryEntry(const QString& expr, const QString& result) {
     history.prepend({expr, result});
-    if (history.size() > 100) history.removeLast();
+    if (history.size() > 100)
+        history.removeLast();
 
     makeHistoryItem(historyList, expr, result);
     saveHistory();
 }
-
-QString CalculatorWidget::formatNumber(double result) const {
+QString
+CalculatorWidget::formatNumber(double result) const {
     QString s = QString::number(result, 'g', 10);
     if (scientificNotation)
         s = QString::number(result, 'E', 10);
     return s;
 }
-
-void CalculatorWidget::onButtonClicked(const QString& text) {
+void
+CalculatorWidget::onButtonClicked(const QString& text) {
     // C
     if (text == "C") {
         currentExpression = "0";
@@ -320,8 +330,8 @@ void CalculatorWidget::onButtonClicked(const QString& text) {
     }
 
     // Operators and parens
-    if (text == "+" || text == "-" || text == "*" || text == "/" || text == "^"
-        || text == "%" || text == "(" || text == ")") {
+    if (text == "+" || text == "-" || text == "*" || text == "/" || text == "^" || text == "%" || text == "("
+        || text == ")") {
         justEvaluated = false;
         if (text == "-" && currentExpression == "0") {
             currentExpression = "-";
@@ -378,19 +388,70 @@ void CalculatorWidget::onButtonClicked(const QString& text) {
         return true;
     };
 
-    if (text == "√")       { applyUnary([&](double v){ return engine.sqrt(v); }); return; }
-    if (text == "sin")     { if (secondMode) applyUnary([&](double v){ return engine.asin(v); }); else applyUnary([&](double v){ return engine.sin(v); }); return; }
-    if (text == "cos")     { if (secondMode) applyUnary([&](double v){ return engine.acos(v); }); else applyUnary([&](double v){ return engine.cos(v); }); return; }
-    if (text == "tan")     { if (secondMode) applyUnary([&](double v){ return engine.atan(v); }); else applyUnary([&](double v){ return engine.tan(v); }); return; }
-    if (text == "ln")      { if (secondMode) applyUnary([&](double v){ return engine.exp(v); }); else applyUnary([&](double v){ return engine.ln(v); }); return; }
-    if (text == "log")     { applyUnary([&](double v){ return engine.log10(v); }); return; }
-    if (text == "1/x")     { applyUnary([&](double v){ return engine.reciprocal(v); }); return; }
-    if (text == "x²")      { applyUnary([&](double v){ return engine.square(v); }); return; }
-    if (text == "x³")      { applyUnary([&](double v){ return engine.cube(v); }); return; }
-    if (text == "n!")      { applyUnary([&](double v){ return engine.factorial(v); }); return; }
-    if (text == "10ˣ")     { applyUnary([&](double v){ return engine.tenPower(v); }); return; }
-    if (text == "|x|")     { applyUnary([&](double v){ return engine.abs(v); }); return; }
-    if (text == "perc")    { applyUnary([&](double v){ return engine.percentage(v); }); return; }
+    if (text == "√") {
+        applyUnary([&](double v) { return engine.sqrt(v); });
+        return;
+    }
+    if (text == "sin") {
+        if (secondMode)
+            applyUnary([&](double v) { return engine.asin(v); });
+        else
+            applyUnary([&](double v) { return engine.sin(v); });
+        return;
+    }
+    if (text == "cos") {
+        if (secondMode)
+            applyUnary([&](double v) { return engine.acos(v); });
+        else
+            applyUnary([&](double v) { return engine.cos(v); });
+        return;
+    }
+    if (text == "tan") {
+        if (secondMode)
+            applyUnary([&](double v) { return engine.atan(v); });
+        else
+            applyUnary([&](double v) { return engine.tan(v); });
+        return;
+    }
+    if (text == "ln") {
+        if (secondMode)
+            applyUnary([&](double v) { return engine.exp(v); });
+        else
+            applyUnary([&](double v) { return engine.ln(v); });
+        return;
+    }
+    if (text == "log") {
+        applyUnary([&](double v) { return engine.log10(v); });
+        return;
+    }
+    if (text == "1/x") {
+        applyUnary([&](double v) { return engine.reciprocal(v); });
+        return;
+    }
+    if (text == "x²") {
+        applyUnary([&](double v) { return engine.square(v); });
+        return;
+    }
+    if (text == "x³") {
+        applyUnary([&](double v) { return engine.cube(v); });
+        return;
+    }
+    if (text == "n!") {
+        applyUnary([&](double v) { return engine.factorial(v); });
+        return;
+    }
+    if (text == "10ˣ") {
+        applyUnary([&](double v) { return engine.tenPower(v); });
+        return;
+    }
+    if (text == "|x|") {
+        applyUnary([&](double v) { return engine.abs(v); });
+        return;
+    }
+    if (text == "perc") {
+        applyUnary([&](double v) { return engine.percentage(v); });
+        return;
+    }
 
     // Constants
     if (text == "π") {
@@ -410,10 +471,10 @@ void CalculatorWidget::onButtonClicked(const QString& text) {
     // Angle mode toggle
     if (text == "DEG" || text == "RAD") {
         justEvaluated = false;
-        AngleMode newMode = (engine.angleMode() == AngleMode::RADIANS)
-            ? AngleMode::DEGREES : AngleMode::RADIANS;
+        AngleMode newMode = (engine.angleMode() == AngleMode::RADIANS) ? AngleMode::DEGREES : AngleMode::RADIANS;
         engine.setAngleMode(newMode);
-        if (angleBtn) angleBtn->setText(newMode == AngleMode::DEGREES ? "DEG" : "RAD");
+        if (angleBtn)
+            angleBtn->setText(newMode == AngleMode::DEGREES ? "DEG" : "RAD");
         updateStatusLabel();
         return;
     }
@@ -422,7 +483,8 @@ void CalculatorWidget::onButtonClicked(const QString& text) {
     if (text == "SCI" || text == "NORM") {
         justEvaluated = false;
         scientificNotation = !scientificNotation;
-        if (sciBtn) sciBtn->setText(scientificNotation ? "NORM" : "SCI");
+        if (sciBtn)
+            sciBtn->setText(scientificNotation ? "NORM" : "SCI");
         updateStatusLabel();
         bool ok;
         double val = currentExpression.toDouble(&ok);
@@ -453,11 +515,14 @@ void CalculatorWidget::onButtonClicked(const QString& text) {
         try {
             double val = ExpressionParser::evaluate(currentExpression.toStdString(), engine);
             if (!std::isnan(val) && !std::isinf(val)) {
-                if (text == "M+") memoryValue += val;
-                else memoryValue -= val;
+                if (text == "M+")
+                    memoryValue += val;
+                else
+                    memoryValue -= val;
                 updateMemoryButtons();
             }
-        } catch (...) {}
+        } catch (...) {
+        }
         return;
     }
 
@@ -470,124 +535,127 @@ void CalculatorWidget::onButtonClicked(const QString& text) {
     }
     display->setText(currentExpression);
 }
-
-void CalculatorWidget::setTheme(Theme theme) {
+void
+CalculatorWidget::setTheme(Theme theme) {
     currentTheme = theme;
     applyStyle(theme);
 }
-
-void CalculatorWidget::applyStyle(Theme theme) {
+void
+CalculatorWidget::applyStyle(Theme theme) {
     switch (theme) {
-    case Theme::Light: // Light
-        setStyleSheet(
-            "QWidget { background-color: #ecf0f1; color: black; }"
-            "QLineEdit { background-color: white; color: black; border: 1px solid #bdc3c7; padding: 5px; }"
-            "QPushButton { background-color: #bdc3c7; border: none; padding: 8px; font-size: 13px; border-radius: 4px; }"
-            "QPushButton:hover { background-color: #95a5a6; }"
-            "QPushButton:disabled { background-color: #d5dbdb; color: #bdc3c7; }"
-            "#equalsBtn { background-color: #e67e22; color: white; }"
-            "#equalsBtn:hover { background-color: #d35400; }"
-            "QListWidget { background-color: white; color: black; border: 1px solid #bdc3c7; }"
-            "QListWidget::item:selected { background-color: #3498db; color: white; }"
-            "QLabel { color: black; }"
-        );
-        break;
-    case Theme::Dark: // Dark
-        setStyleSheet(
-            "QWidget { background-color: #2c3e50; color: white; }"
-            "QLineEdit { background-color: #34495e; color: white; border: 1px solid #ecf0f1; padding: 5px; }"
-            "QPushButton { background-color: #3498db; border: none; padding: 8px; font-size: 13px; border-radius: 4px; }"
-            "QPushButton:hover { background-color: #2980b9; }"
-            "QPushButton:disabled { background-color: #1a252f; color: #7f8c8d; }"
-            "#equalsBtn { background-color: #e67e22; color: white; }"
-            "#equalsBtn:hover { background-color: #d35400; }"
-            "QListWidget { background-color: #34495e; color: white; border: 1px solid #ecf0f1; }"
-            "QListWidget::item:selected { background-color: #3498db; }"
-            "QLabel { color: white; }"
-        );
-        break;
-    case Theme::Blue: // Blue
-        setStyleSheet(
-            "QWidget { background-color: #1a1a2e; color: #e0e0e0; }"
-            "QLineEdit { background-color: #16213e; color: #e0e0e0; border: 1px solid #0f3460; padding: 5px; }"
-            "QPushButton { background-color: #0f3460; border: none; padding: 8px; font-size: 13px; border-radius: 4px; }"
-            "QPushButton:hover { background-color: #1a5276; }"
-            "QPushButton:disabled { background-color: #0a1628; color: #4a5568; }"
-            "#equalsBtn { background-color: #e94560; color: white; }"
-            "#equalsBtn:hover { background-color: #d63851; }"
-            "QListWidget { background-color: #16213e; color: #e0e0e0; border: 1px solid #0f3460; }"
-            "QListWidget::item:selected { background-color: #0f3460; }"
-            "QLabel { color: #e0e0e0; }"
-        );
-        break;
-    case Theme::Green: // Green
-        setStyleSheet(
-            "QWidget { background-color: #1b4332; color: #d4edda; }"
-            "QLineEdit { background-color: #2d6a4f; color: #d4edda; border: 1px solid #40916c; padding: 5px; }"
-            "QPushButton { background-color: #40916c; border: none; padding: 8px; font-size: 13px; border-radius: 4px; }"
-            "QPushButton:hover { background-color: #52b788; }"
-            "QPushButton:disabled { background-color: #1b4332; color: #6c757d; }"
-            "#equalsBtn { background-color: #e76f51; color: white; }"
-            "#equalsBtn:hover { background-color: #d65a40; }"
-            "QListWidget { background-color: #2d6a4f; color: #d4edda; border: 1px solid #40916c; }"
-            "QListWidget::item:selected { background-color: #40916c; }"
-            "QLabel { color: #d4edda; }"
-        );
-        break;
-    case Theme::Purple: // Purple
-        setStyleSheet(
-            "QWidget { background-color: #1a0a2e; color: #e0d4f0; }"
-            "QLineEdit { background-color: #2d1b69; color: #e0d4f0; border: 1px solid #4a2c8a; padding: 5px; }"
-            "QPushButton { background-color: #4a2c8a; border: none; padding: 8px; font-size: 13px; border-radius: 4px; }"
-            "QPushButton:hover { background-color: #6b3fa0; }"
-            "QPushButton:disabled { background-color: #1a0a2e; color: #6c5b7a; }"
-            "#equalsBtn { background-color: #e8491d; color: white; }"
-            "#equalsBtn:hover { background-color: #d43d15; }"
-            "QListWidget { background-color: #2d1b69; color: #e0d4f0; border: 1px solid #4a2c8a; }"
-            "QListWidget::item:selected { background-color: #4a2c8a; }"
-            "QLabel { color: #e0d4f0; }"
-        );
-        break;
-    case Theme::HighContrast: // High Contrast
-        setStyleSheet(
-            "QWidget { background-color: #000000; color: #ffffff; }"
-            "QLineEdit { background-color: #1a1a1a; color: #ffffff; border: 2px solid #ffffff; padding: 5px; }"
-            "QPushButton { background-color: #333333; border: 2px solid #ffffff; padding: 8px; font-size: 13px; border-radius: 4px; color: #ffffff; }"
-            "QPushButton:hover { background-color: #555555; }"
-            "QPushButton:disabled { background-color: #111111; color: #666666; border: 1px solid #444444; }"
-            "#equalsBtn { background-color: #0044cc; color: #ffffff; border: 2px solid #ffffff; }"
-            "#equalsBtn:hover { background-color: #0066ff; }"
-            "QListWidget { background-color: #1a1a1a; color: #ffffff; border: 2px solid #ffffff; }"
-            "QListWidget::item:selected { background-color: #0044cc; }"
-            "QLabel { color: #ffffff; }"
-        );
-        break;
+        case Theme::Light: // Light
+            setStyleSheet(
+                "QWidget { background-color: #ecf0f1; color: black; }"
+                "QLineEdit { background-color: white; color: black; border: 1px solid #bdc3c7; padding: 5px; }"
+                "QPushButton { background-color: #bdc3c7; border: none; padding: 8px; font-size: 13px; border-radius: "
+                "4px; }"
+                "QPushButton:hover { background-color: #95a5a6; }"
+                "QPushButton:disabled { background-color: #d5dbdb; color: #bdc3c7; }"
+                "#equalsBtn { background-color: #e67e22; color: white; }"
+                "#equalsBtn:hover { background-color: #d35400; }"
+                "QListWidget { background-color: white; color: black; border: 1px solid #bdc3c7; }"
+                "QListWidget::item:selected { background-color: #3498db; color: white; }"
+                "QLabel { color: black; }");
+            break;
+        case Theme::Dark: // Dark
+            setStyleSheet(
+                "QWidget { background-color: #2c3e50; color: white; }"
+                "QLineEdit { background-color: #34495e; color: white; border: 1px solid #ecf0f1; padding: 5px; }"
+                "QPushButton { background-color: #3498db; border: none; padding: 8px; font-size: 13px; border-radius: "
+                "4px; }"
+                "QPushButton:hover { background-color: #2980b9; }"
+                "QPushButton:disabled { background-color: #1a252f; color: #7f8c8d; }"
+                "#equalsBtn { background-color: #e67e22; color: white; }"
+                "#equalsBtn:hover { background-color: #d35400; }"
+                "QListWidget { background-color: #34495e; color: white; border: 1px solid #ecf0f1; }"
+                "QListWidget::item:selected { background-color: #3498db; }"
+                "QLabel { color: white; }");
+            break;
+        case Theme::Blue: // Blue
+            setStyleSheet(
+                "QWidget { background-color: #1a1a2e; color: #e0e0e0; }"
+                "QLineEdit { background-color: #16213e; color: #e0e0e0; border: 1px solid #0f3460; padding: 5px; }"
+                "QPushButton { background-color: #0f3460; border: none; padding: 8px; font-size: 13px; border-radius: "
+                "4px; }"
+                "QPushButton:hover { background-color: #1a5276; }"
+                "QPushButton:disabled { background-color: #0a1628; color: #4a5568; }"
+                "#equalsBtn { background-color: #e94560; color: white; }"
+                "#equalsBtn:hover { background-color: #d63851; }"
+                "QListWidget { background-color: #16213e; color: #e0e0e0; border: 1px solid #0f3460; }"
+                "QListWidget::item:selected { background-color: #0f3460; }"
+                "QLabel { color: #e0e0e0; }");
+            break;
+        case Theme::Green: // Green
+            setStyleSheet(
+                "QWidget { background-color: #1b4332; color: #d4edda; }"
+                "QLineEdit { background-color: #2d6a4f; color: #d4edda; border: 1px solid #40916c; padding: 5px; }"
+                "QPushButton { background-color: #40916c; border: none; padding: 8px; font-size: 13px; border-radius: "
+                "4px; }"
+                "QPushButton:hover { background-color: #52b788; }"
+                "QPushButton:disabled { background-color: #1b4332; color: #6c757d; }"
+                "#equalsBtn { background-color: #e76f51; color: white; }"
+                "#equalsBtn:hover { background-color: #d65a40; }"
+                "QListWidget { background-color: #2d6a4f; color: #d4edda; border: 1px solid #40916c; }"
+                "QListWidget::item:selected { background-color: #40916c; }"
+                "QLabel { color: #d4edda; }");
+            break;
+        case Theme::Purple: // Purple
+            setStyleSheet(
+                "QWidget { background-color: #1a0a2e; color: #e0d4f0; }"
+                "QLineEdit { background-color: #2d1b69; color: #e0d4f0; border: 1px solid #4a2c8a; padding: 5px; }"
+                "QPushButton { background-color: #4a2c8a; border: none; padding: 8px; font-size: 13px; border-radius: "
+                "4px; }"
+                "QPushButton:hover { background-color: #6b3fa0; }"
+                "QPushButton:disabled { background-color: #1a0a2e; color: #6c5b7a; }"
+                "#equalsBtn { background-color: #e8491d; color: white; }"
+                "#equalsBtn:hover { background-color: #d43d15; }"
+                "QListWidget { background-color: #2d1b69; color: #e0d4f0; border: 1px solid #4a2c8a; }"
+                "QListWidget::item:selected { background-color: #4a2c8a; }"
+                "QLabel { color: #e0d4f0; }");
+            break;
+        case Theme::HighContrast: // High Contrast
+            setStyleSheet(
+                "QWidget { background-color: #000000; color: #ffffff; }"
+                "QLineEdit { background-color: #1a1a1a; color: #ffffff; border: 2px solid #ffffff; padding: 5px; }"
+                "QPushButton { background-color: #333333; border: 2px solid #ffffff; padding: 8px; font-size: 13px; "
+                "border-radius: 4px; color: #ffffff; }"
+                "QPushButton:hover { background-color: #555555; }"
+                "QPushButton:disabled { background-color: #111111; color: #666666; border: 1px solid #444444; }"
+                "#equalsBtn { background-color: #0044cc; color: #ffffff; border: 2px solid #ffffff; }"
+                "#equalsBtn:hover { background-color: #0066ff; }"
+                "QListWidget { background-color: #1a1a1a; color: #ffffff; border: 2px solid #ffffff; }"
+                "QListWidget::item:selected { background-color: #0044cc; }"
+                "QLabel { color: #ffffff; }");
+            break;
     }
 }
-
-void CalculatorWidget::cycleTheme() {
+void
+CalculatorWidget::cycleTheme() {
     int next = (static_cast<int>(currentTheme) + 1) % static_cast<int>(Theme::Count);
     currentTheme = static_cast<Theme>(next);
-    if (themeBtn) themeBtn->setText("Theme: " + themeName(currentTheme));
+    if (themeBtn)
+        themeBtn->setText("Theme: " + themeName(currentTheme));
     setTheme(currentTheme);
 }
-
-void CalculatorWidget::updateButtonLabels() {
-    if (sinBtn) sinBtn->setText(secondMode ? "sin⁻¹" : "sin");
-    if (cosBtn) cosBtn->setText(secondMode ? "cos⁻¹" : "cos");
-    if (tanBtn) tanBtn->setText(secondMode ? "tan⁻¹" : "tan");
-    if (lnBtn)  lnBtn->setText(secondMode ? "eˣ" : "ln");
+void
+CalculatorWidget::updateButtonLabels() {
+    if (sinBtn)
+        sinBtn->setText(secondMode ? "sin⁻¹" : "sin");
+    if (cosBtn)
+        cosBtn->setText(secondMode ? "cos⁻¹" : "cos");
+    if (tanBtn)
+        tanBtn->setText(secondMode ? "tan⁻¹" : "tan");
+    if (lnBtn)
+        lnBtn->setText(secondMode ? "eˣ" : "ln");
 }
-
-QString CalculatorWidget::themeName(Theme t) {
-    static const char* names[] = {
-        "Light", "Dark", "Blue", "Green", "Purple", "High Contrast"
-    };
+QString
+CalculatorWidget::themeName(Theme t) {
+    static const char* names[] = {"Light", "Dark", "Blue", "Green", "Purple", "High Contrast"};
     int idx = static_cast<int>(t);
     return (idx >= 0 && idx < static_cast<int>(Theme::Count)) ? names[idx] : "Unknown";
 }
-
-void CalculatorWidget::loadHistory() {
+void
+CalculatorWidget::loadHistory() {
     QSettings settings("Calculator", "Qt6Calculator");
     int size = settings.beginReadArray("history");
     for (int i = 0; i < size; ++i) {
@@ -600,8 +668,8 @@ void CalculatorWidget::loadHistory() {
     }
     settings.endArray();
 }
-
-void CalculatorWidget::saveHistory() {
+void
+CalculatorWidget::saveHistory() {
     QSettings settings("Calculator", "Qt6Calculator");
     settings.beginWriteArray("history");
     for (int i = 0; i < history.size(); ++i) {
@@ -611,8 +679,8 @@ void CalculatorWidget::saveHistory() {
     }
     settings.endArray();
 }
-
-void CalculatorWidget::resizeEvent(QResizeEvent *event) {
+void
+CalculatorWidget::resizeEvent(QResizeEvent* event) {
     int w = width();
     int calcW = historyVisible ? w * 3 / 4 : w;
 
@@ -626,16 +694,16 @@ void CalculatorWidget::resizeEvent(QResizeEvent *event) {
 
     QWidget::resizeEvent(event);
 }
-
-void CalculatorWidget::timerEvent(QTimerEvent *event) {
+void
+CalculatorWidget::timerEvent(QTimerEvent* event) {
     if (event->timerId() == keyBufferTimerId) {
         killTimer(keyBufferTimerId);
         keyBufferTimerId = 0;
         keyBuffer.clear();
     }
 }
-
-void CalculatorWidget::keyPressEvent(QKeyEvent *event) {
+void
+CalculatorWidget::keyPressEvent(QKeyEvent* event) {
     if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter) {
         keyBuffer.clear();
         onButtonClicked("=");
@@ -689,7 +757,8 @@ void CalculatorWidget::keyPressEvent(QKeyEvent *event) {
         // Buffer alpha chars to detect multi-key function names
         if (t[0].isLetter()) {
             keyBuffer += t.toLower();
-            if (keyBufferTimerId) killTimer(keyBufferTimerId);
+            if (keyBufferTimerId)
+                killTimer(keyBufferTimerId);
             keyBufferTimerId = startTimer(1200);
 
             static const QStringList fns = {"sin", "cos", "tan", "ln", "log", "sqrt", "perc"};
@@ -715,8 +784,8 @@ void CalculatorWidget::keyPressEvent(QKeyEvent *event) {
             onButtonClicked("perc");
             return;
         }
-        if (t[0].isDigit() || t == "." || t == "+" || t == "-"
-            || t == "*" || t == "/" || t == "^" || t == "(" || t == ")") {
+        if (t[0].isDigit() || t == "." || t == "+" || t == "-" || t == "*" || t == "/" || t == "^" || t == "("
+            || t == ")") {
             onButtonClicked(t);
         }
     }

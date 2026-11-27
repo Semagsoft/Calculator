@@ -95,3 +95,13 @@ jobs:
           build-bundle: false
           upload-artifact: false
           cache: true
+
+  lint:
+    name: Lint (clang-format)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install clang-format
+        run: sudo apt-get update && sudo apt-get install -y clang-format
+      - name: Check formatting
+        run: clang-format --dry-run --Werror src/ include/ tests/

@@ -5,14 +5,15 @@
 #include <iostream>
 #include <limits>
 
-#define ASSERT_NEAR(a, b, eps) do { \
-    if (std::abs((a) - (b)) > (eps)) { \
-        std::cerr << "FAIL at " << __LINE__ << ": " << (a) << " != " << (b) << " (eps=" << (eps) << ")\n"; \
-        return 1; \
-    } \
-} while(0)
-
-int testEngine() {
+#define ASSERT_NEAR(a, b, eps)                                                                                         \
+    do {                                                                                                               \
+        if (std::abs((a) - (b)) > (eps)) {                                                                             \
+            std::cerr << "FAIL at " << __LINE__ << ": " << (a) << " != " << (b) << " (eps=" << (eps) << ")\n";         \
+            return 1;                                                                                                  \
+        }                                                                                                              \
+    } while (0)
+int
+testEngine() {
     CalculatorEngine eng;
 
     // Basic operations
@@ -117,8 +118,8 @@ int testEngine() {
     std::cout << "  CalculatorEngine: PASS\n";
     return 0;
 }
-
-int testParser() {
+int
+testParser() {
     CalculatorEngine eng;
 
     // Simple arithmetic
@@ -178,14 +179,14 @@ int testParser() {
 
     // Modulo
     assert(ExpressionParser::evaluate("10%3", eng) == 1.0);
-    assert(ExpressionParser::evaluate("10%3%2", eng) == 1.0); // left-assoc: (10%3)%2 = 1%2 = 1
+    assert(ExpressionParser::evaluate("10%3%2", eng) == 1.0);  // left-assoc: (10%3)%2 = 1%2 = 1
     assert(ExpressionParser::evaluate("10+5%3", eng) == 12.0); // precedence: 10+(5%3) = 10+2 = 12
 
     std::cout << "  ExpressionParser: PASS\n";
     return 0;
 }
-
-int main() {
+int
+main() {
     std::cout << "Calculator Tests\n";
     std::cout << "================\n";
 
