@@ -96,6 +96,6 @@ cp /usr/lib/qt6/plugins/wayland-decoration-client/* "$APPDIR/usr/plugins/wayland
 
 echo "==> Creating AppImage..."
 # VERSION already derived from CMakeLists.txt above.
-"$TOOLS_DIR/appimagetool/AppRun" "$APPDIR" "$SCRIPT_DIR/Calculator-x86_64.AppImage"
+"$TOOLS_DIR/appimagetool/AppRun" "$APPDIR" "$SCRIPT_DIR/Calculator-${VERSION}-x86_64.AppImage"
 
-echo "==> Done! AppImage created: $SCRIPT_DIR/Calculator-x86_64.AppImage"
+echo "==> Done! AppImage created: $SCRIPT_DIR/Calculator-${VERSION}-x86_64.AppImage"

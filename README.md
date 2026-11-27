@@ -59,7 +59,8 @@ cmake -S . -B build -DBUILD_TESTS=OFF
 │   ├── CalculatorWidget.cpp
 │   └── ExpressionParser.cpp
 └── tests/
-    └── test_main.cpp          # Unit tests
+    ├── test_main.cpp          # Unit tests (engine + parser)
+    └── ui_test_main.cpp       # UI tests (widget)
 ```
 
 ## Controls

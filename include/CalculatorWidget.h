@@ -69,6 +69,10 @@ class CalculatorWidget : public QWidget {
     saveHistory();
     void
     updateButtonLabels();
+    void
+    loadSettings();
+    void
+    saveSettings();
     static QString
     themeName(Theme t);
 

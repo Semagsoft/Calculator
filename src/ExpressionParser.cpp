@@ -7,6 +7,12 @@
 
 static const std::set<std::string> functions = {"sin",   "cos",    "tan",  "ln",   "log",    "sqrt",
                                                 "recip", "square", "cube", "fact", "tenpow", "abs"};
+// A numeric token must contain at least one digit, so a lone "." is not
+// accepted as a number and is reported as a syntax error instead.
+static bool
+isNumber(const std::string& token) {
+    return std::any_of(token.begin(), token.end(), [](unsigned char c) { return isdigit(c); });
+}
 std::vector<std::string>
 ExpressionParser::tokenize(const std::string& expression) {
     std::vector<std::string> tokens;
@@ -91,7 +97,7 @@ ExpressionParser::shuntingYard(const std::vector<std::string>& tokens) {
     std::stack<std::string> ops;
 
     for (const std::string& token : tokens) {
-        if (isdigit(token[0]) || (token.length() > 1 && (isdigit(token[1]) || token[1] == '.'))) {
+        if (isNumber(token)) {
             output.push_back(token);
         } else if (token == "(") {
             ops.push(token);
@@ -138,7 +144,7 @@ double
 ExpressionParser::evaluateRPN(const std::vector<std::string>& rpn, CalculatorEngine& engine) {
     std::stack<double> values;
     for (const std::string& token : rpn) {
-        if (isdigit(token[0]) || (token.length() > 1 && (isdigit(token[1]) || token[1] == '.'))) {
+        if (isNumber(token)) {
             values.push(std::stod(token));
         } else if (token == "(" || token == ")") {
             continue;

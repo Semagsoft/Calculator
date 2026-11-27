@@ -14,8 +14,13 @@
 #include <cmath>
 CalculatorWidget::CalculatorWidget(QWidget* parent) : QWidget(parent), currentExpression("0") {
     setMinimumSize(480, 440);
+    loadSettings();
     setupUI();
-    applyStyle(Theme::Light);
+    applyStyle(currentTheme);
+    if (angleBtn)
+        angleBtn->setText(engine.angleMode() == AngleMode::DEGREES ? "DEG" : "RAD");
+    if (sciBtn)
+        sciBtn->setText(scientificNotation ? "NORM" : "SCI");
     loadHistory();
     updateStatusLabel();
 }
@@ -476,6 +481,7 @@ CalculatorWidget::onButtonClicked(const QString& text) {
         if (angleBtn)
             angleBtn->setText(newMode == AngleMode::DEGREES ? "DEG" : "RAD");
         updateStatusLabel();
+        saveSettings();
         return;
     }
 
@@ -486,6 +492,7 @@ CalculatorWidget::onButtonClicked(const QString& text) {
         if (sciBtn)
             sciBtn->setText(scientificNotation ? "NORM" : "SCI");
         updateStatusLabel();
+        saveSettings();
         bool ok;
         double val = currentExpression.toDouble(&ok);
         if (ok) {
@@ -505,7 +512,11 @@ CalculatorWidget::onButtonClicked(const QString& text) {
 
     if (text == "MR") {
         justEvaluated = false;
-        currentExpression += QString::number(memoryValue, 'g', 10);
+        QString mem = QString::number(memoryValue, 'g', 10);
+        if (currentExpression == "0")
+            currentExpression = mem;
+        else
+            currentExpression += mem;
         display->setText(currentExpression);
         return;
     }
@@ -636,6 +647,7 @@ CalculatorWidget::cycleTheme() {
     if (themeBtn)
         themeBtn->setText("Theme: " + themeName(currentTheme));
     setTheme(currentTheme);
+    saveSettings();
 }
 void
 CalculatorWidget::updateButtonLabels() {
@@ -678,6 +690,21 @@ CalculatorWidget::saveHistory() {
         settings.setValue("result", history[i].result);
     }
     settings.endArray();
+}
+void
+CalculatorWidget::loadSettings() {
+    QSettings settings("Calculator", "Qt6Calculator");
+    int themeIdx = settings.value("theme", 0).toInt();
+    currentTheme = static_cast<Theme>(qBound(0, themeIdx, static_cast<int>(Theme::Count) - 1));
+    engine.setAngleMode(settings.value("angleMode/Degrees", false).toBool() ? AngleMode::DEGREES : AngleMode::RADIANS);
+    scientificNotation = settings.value("scientificNotation", false).toBool();
+}
+void
+CalculatorWidget::saveSettings() {
+    QSettings settings("Calculator", "Qt6Calculator");
+    settings.setValue("theme", static_cast<int>(currentTheme));
+    settings.setValue("angleMode/Degrees", engine.angleMode() == AngleMode::DEGREES);
+    settings.setValue("scientificNotation", scientificNotation);
 }
 void
 CalculatorWidget::resizeEvent(QResizeEvent* event) {
